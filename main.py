@@ -10,8 +10,6 @@ with engine.connect() as conn:
         ORDER BY id
     """))
 
-    for row in rows:
-        print(row.id, row.first_name, row.last_name, row.email, row.balance)
 from decimal import Decimal
 from sqlalchemy import Numeric, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -30,9 +28,15 @@ class Customer(Base):
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 with Session(engine) as session:
-    customers = session.scalars(
-        select(Customer).where(Customer.balance > 10000)
-    ).all()
+    new_customer = Customer(
+        first_name="Bekzat",
+        last_name="Sadykov",
+        email="bekzat@gmail.com",
+        city="Bishkek",
+        balance=Decimal("15000"),
+    )
 
-    for customer in customers:
-        print(customer.first_name, customer.last_name, customer.balance)
+    session.add(new_customer)
+    session.commit()
+
+    print("Customer saved with ID:", new_customer.id)
