@@ -22,12 +22,13 @@ class Person(Base):
 Base.metadata.create_all(engine)
 
 with Session(engine) as session:
-    anna=Person(name="Kadicha", email="bolotovakadicha@icloud.com")
-    session.add(anna)
-    session.add_all([
-        Person(name="Boris", email="boloy"),
-        Person(name="Kafat"),
-
-    ])
-    session.commit()
-    print(anna.id)
+    user=session.get(Person,1)
+    stmt=select(Person).where(Person.name==" Anna")
+    anna=session.scalars(stmt).first()
+    stmt=(
+        select(Person)
+        .where(Person.email.is_not(None))
+        .order_by(Person.name)
+        .limit(10)
+    )
+    persons=session.scalars(stmt).all()
