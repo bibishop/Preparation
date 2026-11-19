@@ -22,18 +22,12 @@ class Person(Base):
 Base.metadata.create_all(engine)
 
 with Session(engine) as session:
-    # Check whether Aida is already in the table.
-    person = session.scalar(
-        select(Person).where(Person.email == "aida@example.com")
-    )
+    anna=Person(name="Kadicha", email="bolotovakadicha@icloud.com")
+    session.add(anna)
+    session.add_all([
+        Person(name="Boris", email="boloy"),
+        Person(name="Kafat"),
 
-    # Add Aida only if her email is not already present.
-    if person is None:
-        session.add(Person(name="Aida", email="aida@example.com"))
-        session.commit()
-
-    # Read and print all people.
-    people = session.scalars(select(Person)).all()
-
-    for person in people:
-        print(person.id, person.name, person.email)
+    ])
+    session.commit()
+    print(anna.id)
