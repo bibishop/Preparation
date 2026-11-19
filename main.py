@@ -7,11 +7,9 @@ conn = psycopg2.connect(
     password="Dmail12345",
 )
 cur = conn.cursor()
+name=input("Enter your name: ")
 cur.execute(
-    "SELECT id,name,email from person where id>%s",(0,),
+    "select *from users where name=%s",
+    (name,)
 )
-rows=cur.fetchall()
-for person_id, name, email in rows:
-    print(person_id, name, email)
-cur.execute("select count(*) from person")
-total=cur.fetchone()[0]
+cur.close()
